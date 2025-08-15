@@ -1,98 +1,112 @@
 const quizData = [
-    {
-        question: "Which language runs in a web browser?",
-        a: "Java",
-        b: "C",
-        c: "Python",
-        d: "JavaScript",
-        correct: "d",
-    },
-    {
-        question: "What does CSS stand for?",
-        a: "Central Style Sheets",
-        b: "Cascading Style Sheets",
-        c: "Cascading Simple Sheets",
-        d: "Cars SUVs Sailboats",
-        correct: "b",
-    },
-    {
-        question: "What does HTML stand for?",
-        a: "Hypertext Markup Language",
-        b: "Hypertext Markdown Language",
-        c: "Hyperloop Machine Language",
-        d: "Helicopters Terminals Motorboats Lamborginis",
-        correct: "a",
-    },
-    {
-        question: "What year was JavaScript launched?",
-        a: "1996",
-        b: "1995",
-        c: "1994",
-        d: "none of the above",
-        correct: "b",
-    },
-];
+            {
+                question: "What is the capital of France?",
+                options: ["Berlin", "Madrid", "Paris", "Lisbon"],
+                answer: "Paris"
+            },
+            {
+                question: "Which language is used for web development?",
+                options: ["Python", "HTML", "Java", "C++"],
+                answer: "HTML"
+            },
+            {
+                question: "Who wrote 'Hamlet'?",
+                options: ["Charles Dickens", "William Shakespeare", "Mark Twain", "Jane Austen"],
+                answer: "William Shakespeare"
+            },
+            {
+                question: "What is the largest planet in our solar system?",
+                options: ["Earth", "Mars", "Jupiter", "Saturn"],
+                answer: "Jupiter"
+            },
+            {
+                question: "Which country is known as the Land of the Rising Sun?",
+                options: ["China", "Japan", "South Korea", "India"],
+                answer: "Japan"
+            }
+        ];
 
-const quiz = document.getElementById('quiz')
-const answerEls = document.querySelectorAll('.answer')
-const questionEl = document.getElementById('question')
-const a_text = document.getElementById('a_text')
-const b_text = document.getElementById('b_text')
-const c_text = document.getElementById('c_text')
-const d_text = document.getElementById('d_text')
-const submitBtn = document.getElementById('submit')
+        let currentQuestion = 0;
+        let score = 0;
+        let timeLeft = 30;
+        let timerInterval;
+        const timerEl = document.getElementById('time');
+        const questionEl = document.querySelector('.question');
+        const optionsEl = document.querySelector('.options');
+        const resultEl = document.querySelector('.result');
+        const scoreEl = document.getElementById('score');
+        const restartBtn = document.querySelector('.restart-btn');
 
-let currentQuiz = 0
-let score = 0
-
-loadQuiz()
-
-function loadQuiz() {
-    deselectAnswers()
-
-    const currentQuizData = quizData[currentQuiz]
-
-    questionEl.innerText = currentQuizData.question
-    a_text.innerText = currentQuizData.a
-    b_text.innerText = currentQuizData.b
-    c_text.innerText = currentQuizData.c
-    d_text.innerText = currentQuizData.d
-}
-
-function deselectAnswers() {
-    answerEls.forEach(answerEl => answerEl.checked = false)
-}
-
-function getSelected() {
-    let answer
-
-    answerEls.forEach(answerEl => {
-        if(answerEl.checked) {
-            answer = answerEl.id
-        }
-    })
-
-    return answer
-}
-
-submitBtn.addEventListener('click', () => {
-    const answer = getSelected()
-    
-    if(answer) {
-        if(answer === quizData[currentQuiz].correct) {
-            score++
+        // Function to load the question
+        function loadQuestion() {
+            if (currentQuestion >= quizData.length) {
+                endQuiz();
+                return;
+            }
+            clearInterval(timerInterval);
+            timeLeft = 30;
+            timerEl.textContent = timeLeft;
+            startTimer();
+            const currentQuiz = quizData[currentQuestion];
+            questionEl.textContent = currentQuiz.question;
+            optionsEl.innerHTML = ''; // Clear previous options
+            currentQuiz.options.forEach(option => {
+                const button = document.createElement('button');
+                button.classList.add('option');
+                button.textContent = option;
+                button.onclick = () => checkAnswer(option);
+                optionsEl.appendChild(button);
+            });
         }
 
-        currentQuiz++
-
-        if(currentQuiz < quizData.length) {
-            loadQuiz()
-        } else {
-            quiz.innerHTML = `
-                <h2>You answered ${score}/${quizData.length} questions correctly</h2>
-
-                <button onclick="location.reload()">Reload</button>
-            `
+        // Check the answer
+        function checkAnswer(selectedOption) {
+            if (selectedOption === quizData[currentQuestion].answer) {
+                score++;
+            }
+            currentQuestion++;
+            loadQuestion();
         }
-    }
-})
+
+        // Start the timer
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerEl.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    endQuiz();
+                }
+            }, 1000);
+        }
+
+        // End the quiz and show the results
+        function endQuiz() {
+            clearInterval(timerInterval);
+            questionEl.style.display = 'none';
+            optionsEl.style.display = 'none';
+            resultEl.style.display = 'block';
+            scoreEl.textContent = score;
+            restartBtn.style.display = 'block';
+        }
+
+        // Restart the quiz
+        restartBtn.addEventListener('click', () => {
+            // Reset variables
+            currentQuestion = 0;
+            score = 0;
+            timeLeft = 30;
+            timerEl.textContent = timeLeft;
+
+            // Reset the display
+            questionEl.style.display = 'block';
+            optionsEl.style.display = 'flex'; // Ensure options are displayed correctly
+            resultEl.style.display = 'none';
+            restartBtn.style.display = 'none';
+
+            // Load the first question
+            loadQuestion();
+        });
+
+        // Initialize the quiz with the first question
+loadQuestion();
