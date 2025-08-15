@@ -1,43 +1,57 @@
 Creating a quiz app is an excellent way to learn the fundamentals of web development. In this tutorial, we will build a Quiz App that features a timer, allowing users to take a timed quiz with multiple-choice questions. The app will use HTML for the structure, CSS for styling, and JavaScript for functionality, including the timer and score tracking.
-
+______________________
 About index.html 
 
-* The quiz app starts with `<!DOCTYPE html>` which tells the browser this is an HTML5 document. Then, the `<html lang="en">` tag wraps the whole page and specifies that the content is in English.
+* `<html>`: The root element that contains the entire webpage.
 
-Inside the `<head>` section, we have:
+* `<style src="style.css"></style>`: This tag is intended to link a CSS file, but it should be `<link rel="stylesheet" href="style.css">` instead. As written, it won't load the CSS correctly.
 
-* `<meta charset="UTF-8">` which ensures all characters (like symbols and emojis) display correctly,
-* `<meta name="viewport" content="width=device-width, initial-scale=1.0">` which makes the layout responsive on all screen sizes,
-* `<link rel="stylesheet" href="style.css">` which connects to a CSS file to style the page,
-* and `<title>Quiz App</title>`, which sets the title that appears on the browser tab.
+* `<body>`: Contains all the visible content of the page.
 
-In the `<body>`, the main content is inside a `<div class="quiz-container" id="quiz">`, which serves as the main wrapper for everything.
+* `<div class="quiz-container">`: A wrapper div that holds the whole quiz interface.
 
-Within that, there's a `<div class="quiz-header">` that holds the actual quiz content:
+* `<div class="timer">Time Left: <span id="time">30</span>s</div>`: Displays a countdown timer with the time value inside the `<span id="time">` so it can be updated dynamically.
 
-* `<h2 id="question">Question text</h2>` is where each quiz question will appear.
-* Then, a list of answer choices is shown using `<ul>` (unordered list) and four `<li>` (list item) tags, one for each answer option.
+* `<div class="question">Question will appear here</div>`: Placeholder where the quiz question text will be displayed.
 
-Each answer option has:
+* `<div class="options"></div>`: Empty container where the answer options (like buttons or radio inputs) will be inserted dynamically.
 
-* an `<input type="radio">` with `name="answer"` so all options are part of the same group (allowing only one selection),
-* and a `<label>` with `for="a"` (or b, c, d) so that clicking on the label also selects the radio button.
+* `<div class="result">Your score: <span id="score">0</span></div>`: Shows the user’s current score, with the number inside the `<span id="score">` for easy updates.
 
-Each radio input and label has a unique `id` (like `id="a"` and `id="a_text"`) so JavaScript can change the text for each option dynamically.
+* `<button class="restart-btn">Restart Quiz</button>`: A button users can click to restart the quiz.
 
-At the bottom, there's a `<button id="submit">Submit</button>` that users click to submit their answer.
-
-Finally, `<script src="script.js"></script>` links to an external JavaScript file that will handle everything behind the scenes—like showing new questions, checking answers, and keeping score.
-
+* `<script src="script.js"></script>`: Links an external JavaScript file that will handle quiz logic like timing, questions, scoring, and interaction.
+________________
 About script.js file
 
-* This JavaScript code powers a simple quiz app. It starts with a `quizData` array containing quiz questions, answer options (`a`, `b`, `c`, `d`), and the correct answer for each. When the page loads, the `loadQuiz()` function displays the current question and its options in the HTML. The function `deselectAnswers()` clears any previously selected radio buttons, and `getSelected()` checks which answer the user selected. When the user clicks the submit button, the script checks if the selected answer is correct, updates the score, and moves to the next question. When all questions are done, it shows the final score and provides a button to restart the quiz by reloading the page.
+* The `<div class="question">` displays each quiz question from the `quizData` array.
+* The `<div class="options">` holds dynamically created `<button>` elements for each answer choice, letting users click to select an answer.
+* The `<span id="time">` inside the timer `<div>` shows a countdown starting at 30 seconds for each question.
+* When an answer button is clicked, the code checks if it matches the correct answer and updates the score.
+* If time runs out or all questions are answered, the `<div class="result">` becomes visible to show the final score inside `<span id="score">`.
+* The `<button class="restart-btn">` appears to let the user restart the quiz, resetting everything and showing the first question again.
+* The script manages all these elements by updating their text content, showing/hiding them, and handling user interactions smoothly to create an engaging timed quiz experience.
+______________________
+ About style.css file
 
-About style.css file
- * This CSS styles a clean and centered quiz app using the Poppins font. The `body` has a gradient background and uses Flexbox to center the `.quiz-container`, which has a white background, rounded corners, and a shadow. Inside, the `.quiz-header` adds padding around the question (`h2`) and answers (`ul > li`). The list has no default styling, with each option spaced and clickable via styled `label` tags. The `button` spans the full width, has a purple background that changes on hover and focus, and inherits the overall font style for consistency.
- * Uses of Quiz App
 
+* `body`: Sets the overall font, background color, and centers the entire quiz container both vertically and horizontally using flexbox. It removes default margin and padding for a clean layout.
 
+* `.quiz-container`: Styles the main wrapper `<div>` for the quiz with a white background, rounded corners (`border-radius`), subtle shadow (`box-shadow`), padding inside, and limits the width for readability.
+
+* `.question`: Styles the `<div class="question">` that shows the quiz question text, making the font a bit larger and adding space below it.
+
+* `.options`: Styles the container `<div class="options">` that holds all answer buttons, arranging them vertically with spacing between (`gap`).
+
+* `.option`: Styles each answer `<button>` inside `.options` with padding, border, rounded corners, and a pointer cursor. It also adds smooth color changes when hovered to highlight interactivity.
+
+* `.timer`: Styles the timer `<div class="timer">` with bigger font size and an orange color to make it stand out.
+
+* `.result`: Styles the results `<div class="result">` with a larger green font, but it is hidden initially (`display: none`) and shown when the quiz ends.
+
+* `.restart-btn`: Styles the restart `<button class="restart-btn">` with a blue background, white text, rounded corners, padding, and a pointer cursor. It is also hidden by default and appears after the quiz finishes. On hover, its background color darkens for feedback.
+__________________
+Uses of Quizz App Project
 * ✅ **Quick learning and revision**
 * ✅ **Classroom teaching and assessments**
 * ✅ **Employee training and onboarding**
